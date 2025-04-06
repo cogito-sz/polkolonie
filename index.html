@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aktywne Dzieciaki | Półkolonie 2025</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3e9fdf;
+            --secondary: #ffb400;
+            --accent: #ff6b6b;
+            --dark: #2d3748;
+            --light: #f7fafc;
+        }
+        
+        .bg-primary { background-color: var(--primary); }
+        .bg-secondary { background-color: var(--secondary); }
+        .bg-accent { background-color: var(--accent); }
+        .text-primary { color: var(--primary); }
+        .text-secondary { color: var(--secondary); }
+        .text-accent { color: var(--accent); }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3182ce;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--dark);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #f59e0b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .hero {
+            background-image: url(/api/placeholder/1200/600);
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .package-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .package-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .package-popular {
+            border-color: var(--secondary);
+            transform: scale(1.05);
+        }
+        
+        .package-popular:hover {
+            transform: translateY(-5px) scale(1.05);
+        }
+        
+        .testimonial-card {
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .faq-item summary {
+            cursor: pointer;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: var(--light);
+            margin-bottom: 0.5rem;
+        }
+        
+        .faq-item[open] summary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 2rem 0;
+        }
+        
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .step::after {
+            content: "";
+            position: absolute;
+            top: 25px;
+            left: 60%;
+            width: 80%;
+            height: 2px;
+            background-color: var(--light);
+            z-index: -1;
+        }
+        
+        .step:last-child::after {
+            display: none;
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 1rem;
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+        
+        .mobile-cta {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem;
+            background-color: white;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 100;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-cta {
+                display: block;
+            }
+            
+            .hero {
+                min-height: 70vh;
+            }
+        }
+        
+        .gallery-image {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .gallery-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .counter {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .timetable {
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .timetable th {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.75rem;
+        }
+        
+        .timetable td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .timetable tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-gray-800">
+    <!-- Header -->
+    <header class="sticky-header shadow-sm">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <img src="/api/placeholder/150/50" alt="Logo Aktywne Dzieciaki" class="h-12">
+            </div>
+            
+            <nav class="hidden md:flex space-x-6">
+                <a href="#oferta" class="font-medium hover:text-primary">Oferta</a>
+                <a href="#program" class="font-medium hover:text-primary">Program</a>
+                <a href="#kadra" class="font-medium hover:text-primary">Kadra</a>
+                <a href="#cennik" class="font-medium hover:text-primary">Cennik</a>
+                <a href="#faq" class="font-medium hover:text-primary">FAQ</a>
+                <a href="#galeria" class="font-medium hover:text-primary">Galeria</a>
+                <a href="#kontakt" class="font-medium hover:text-primary">Kontakt</a>
+            </nav>
+            
+            <div class="hidden md:block">
+                <a href="#zapisy" class="btn-primary">Zapisz dziecko</a>
+            </div>
+            
+            <button class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero min-h-screen flex items-center justify-center py-20" id="top">
+        <div class="container mx-auto px-4 text-center hero-content text-white">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">WAKACYJNA PRZYGODA TWOJEGO DZIECKA</h1>
+            <h2 class="text-2xl md:text-3xl font-semibold mb-6">Półkolonie "Aktywne Dzieciaki" 2025</h2>
+            <h3 class="text-xl md:text-2xl mb-8">W Rzeszowie, Krakowie i Warszawie</h3>
+            
+            <p class="text-lg md:text-xl max-w-3xl mx-auto mb-8">
+                Zapewnij swojemu dziecku niezapomniane wakacje pełne przygód, nauki i nowych przyjaźni!
+            </p>
+            
+            <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
+                <div class="bg-white bg-opacity-20 backdrop-filter backdrop-blur-md rounded-lg p-6">
+                    <i class="fas fa-paint-brush text-4xl text-secondary mb-4"></i>
+                    <h4 class="text-xl font-semibold mb-2">Kreatywne zajęcia</h4>
+                    <p>Rozwijamy talenty i pasje Twojego dziecka</p>
+                </div>
+                
+                <div class="bg-white bg-opacity-20 backdrop-filter backdrop-blur-md rounded-lg p-6">
+                    <i class="fas fa-user-tie text-4xl text-secondary mb-4"></i>
+                    <h4 class="text-xl font-semibold mb-2">Doświadczona kadra</h4>
+                    <p>Pedagodzy i instruktorzy z pasją</p>
+                </div>
+                
+                <div class="bg-white bg-opacity-20 backdrop-filter backdrop-blur-md rounded-lg p-6">
+                    <i class="fas fa-shield-alt text-4xl text-secondary mb-4"></i>
+                    <h4 class="text-xl font-semibold mb-2">Bezpieczna atmosfera</h4>
+                    <p>Małe grupy i pełna opieka</p>
+                </div>
+            </div>
+            
+            <div class="mb-12">
+                <h4 class="text-xl font-semibold mb-4">Terminy turnusów:</h4>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <div class="bg-white bg-opacity-20 backdrop-filter backdrop-blur-md rounded-lg p-4">
+                        <p class="font-bold">I turnus</p>
+                        <p>30.06 - 04.07.2025</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 backdrop-filter backdrop-blur-md rounded-lg p-4">
+                        <p class="font-bold">II turnus</p>
+                        <p>07.07 - 11.07.2025</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 backdrop-filter backdrop-blur-md rounded-lg p-4">
+                        <p class="font-bold">III turnus</p>
+                        <p>14.07 - 18.07.2025</p>
+                    </div>
+                </div>
+                <p class="text-accent font-semibold mt-4">Zostało już tylko 40% wolnych miejsc na pierwszy turnus!</p>
+            </div>
+            
+            <a href="#zapisy" class="btn-secondary text-lg inline-block">SPRAWDŹ SZCZEGÓŁY I ZAPISZ DZIECKO</a>
+            
+            <div class="mt-12 bg-white bg-opacity-10 backdrop-filter backdrop-blur-md rounded-lg p-6 max-w-2xl mx-auto">
+                <p class="italic">"Moja córka pierwszy raz była tak zadowolona z wakacyjnych zajęć. Codziennie wracała z uśmiechem i nowymi historiami do opowiedzenia."</p>
+                <p class="font-semibold mt-2">- Anna, mama 8-letniej Zosi</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Oferta Section -->
+    <section class="py-20 bg-gray-50" id="oferta">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">O naszych półkoloniach</h2>
+            
+            <div class="flex flex-col md:flex-row gap-12 items-center mb-16">
+                <div class="md:w-1/2">
+                    <img src="/api/placeholder/600/400" alt="Dzieci na półkoloniach" class="rounded-lg shadow-lg w-full">
+                </div>
+                
+                <div class="md:w-1/2">
+                    <h3 class="text-2xl font-semibold mb-4">Dlaczego warto wybrać nasze półkolonie?</h3>
+                    <p class="mb-4">
+                        Półkolonie "Aktywne Dzieciaki" to idealny wybór dla rodziców, którzy chcą zapewnić swoim dzieciom aktywny i rozwijający wypoczynek podczas wakacji. Nasze półkolonie łączą zabawę, naukę i aktywność fizyczną w doskonałych proporcjach, by każde dziecko mogło spędzić niezapomniane wakacje.
+                    </p>
+                    <p class="mb-6">
+                        Zajęcia prowadzone są przez doświadczonych pedagogów i instruktorów, którzy z pasją przekazują wiedzę i umiejętności. Dzięki małym grupom (maksymalnie 12 dzieci na jednego opiekuna), każde dziecko otrzymuje odpowiednią uwagę i wsparcie.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mt-1 mr-2"></i>
+                            <span>Atrakcyjny program zajęć</span>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mt-1 mr-2"></i>
+                            <span>Pełne wyżywienie</span>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mt-1 mr-2"></i>
+                            <span>Ubezpieczenie NNW</span>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mt-1 mr-2"></i>
+                            <span>Wykwalifikowana kadra</span>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mt-1 mr-2"></i>
+                            <span>Bezpieczne obiekty</span>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mt-1 mr-2"></i>
+                            <span>Pamiątkowe gadżety</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-16">
+                <h3 class="text-2xl font-semibold text-center mb-6">Dla kogo są nasze półkolonie?</h3>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <div class="bg-primary rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-child text-white text-3xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-2">Dzieci w wieku 6-12 lat</h4>
+                        <p>Dostosowujemy zajęcia do wieku i możliwości uczestników</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="bg-primary rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-running text-white text-3xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-2">Aktywne dzieciaki</h4>
+                        <p>Dla dzieci, które lubią ruch, zabawę i nowe wyzwania</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="bg-primary rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-lightbulb text-white text-3xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-2">Ciekawi świata</h4>
+                        <p>Dla tych, którzy chcą odkrywać nowe pasje i zainteresowania</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <h3 class="text-2xl font-semibold mb-6">Lokalizacje naszych półkolonii</h3>
+                
+                <div class="grid md:grid-cols-3 gap-8 mb-8">
+                    <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-all">
+                        <img src="/api/placeholder/400/300" alt="Rzeszów" class="rounded mb-4 w-full">
+                        <h4 class="text-xl font-semibold mb-2">Rzeszów</h4>
+                        <p class="mb-4">Szkoła Podstawowa nr 25, ul. Przykładowa 123</p>
+                        <p class="text-sm text-gray-600">Dostępne wszystkie turnusy</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-all">
+                        <img src="/api/placeholder/400/300" alt="Kraków" class="rounded mb-4 w-full">
+                        <h4 class="text-xl font-semibold mb-2">Kraków</h4>
+                        <p class="mb-4">Centrum Sportowe "Aktiv", ul. Sportowa 45</p>
+                        <p class="text-sm text-gray-600">Dostępne wszystkie turnusy</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-all">
+                        <img src="/api/placeholder/400/300" alt="Warszawa" class="rounded mb-4 w-full">
+                        <h4 class="text-xl font-semibold mb-2">Warszawa</h4>
+                        <p class="mb-4">Kompleks Edukacyjny "Przyszłość", ul. Szkolna 78</p>
+                        <p class="text-sm text-gray-600">Dostępne I i II turnus</p>
+                    </div>
+                </div>
+                
+                <a href="#zapisy" class="btn-primary text-lg inline-block">Zarezerwuj miejsce dla swojego dziecka</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Program Section -->
+    <section class="py-20" id="program">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Program półkolonii</h2>
+            
+            <div class="max-w-4xl mx-auto mb-16">
+                <h3 class="text-2xl font-semibold text-center mb-8">Przykładowy dzień na półkoloniach</h3>
+                
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <table class="timetable w-full">
+                        <thead>
+                            <tr>
+                                <th>Godzina</th>
+                                <th>Aktywność</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>8:00 - 8:30</td>
+                                <td>Przyprowadzanie dzieci, gry integracyjne</td>
+                            </tr>
+                            <tr>
+                                <td>8:30 - 10:00</td>
+                                <td>Zajęcia tematyczne (warsztaty kreatywne, naukowe)</td>
+                            </tr>
+                            <tr>
+                                <td>10:00 - 10:30</td>
+                                <td>Drugie śniadanie</td>
+                            </tr>
+                            <tr>
+                                <td>10:30 - 12:30</td>
+                                <td>Zajęcia sportowe / wycieczka / baseny</td>
+                            </tr>
+                            <tr>
+                                <td>12:30 - 13:30</td>
+                                <td>Obiad</td>
+                            </tr>
+                            <tr>
+                                <td>13:30 - 15:00</td>
+                                <td>Zajęcia tematyczne / warsztaty</td>
+                            </tr>
+                            <tr>
+                                <td>15:00 - 15:30</td>
+                                <td>Podwieczorek</td>
+                            </tr>
+                            <tr>
+                                <td>15:30 - 16:30</td>
+                                <td>Gry zespołowe / zajęcia rekreacyjne</td>
+                            </tr>
+                            <tr>
+                                <td>16:30 - 17:00</td>
+                                <td>Podsumowanie dnia, odbieranie dzieci</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 mb-16">
+                <div>
+                    <img src="/api/placeholder/600/400" alt="Zajęcia sportowe" class="rounded-lg shadow-lg w-full mb-6">
+                    <h3 class="text-2xl font-semibold mb-4">Zajęcia sportowe i rekreacyjne</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-futbol text-primary mt-1 mr-3"></i>
+                            <span>Gry zespołowe: piłka nożna, siatkówka, koszykówka</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-swimming-pool text-primary mt-1 mr-3"></i>
+                            <span>Wyjścia na basen (1-2 razy w tygodniu)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-hiking text-primary mt-1 mr-3"></i>
+                            <span>Gry terenowe i podchody</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-biking text-primary mt-1 mr-3"></i>
+                            <span>Zajęcia ruchowe i taneczne</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="mt-8 p-4 bg-gray-100 rounded-lg">
+                        <p class="italic">"Mój syn wrócił zakochany w siatkówkę po tygodniu na półkoloniach. Teraz razem chodzimy grać w weekendy!"</p>
+                        <p class="font-semibold mt-2">- Marcin, tata 10-letniego Kuby</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <img src="/api/placeholder/600/400" alt="Zajęcia kreatywne" class="rounded-lg shadow-lg w-full mb-6">
+                    <h3 class="text-2xl font-semibold mb-4">Zajęcia kreatywne i edukacyjne</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-palette text-primary mt-1 mr-3"></i>
+                            <span>Warsztaty plastyczne i rękodzieło</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-robot text-primary mt-1 mr-3"></i>
+                            <span>Eksperymenty naukowe i robotyka</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-theater-masks text-primary mt-1 mr-3"></i>
+                            <span>Zajęcia teatralne i muzyczne</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-utensils text-primary mt-1 mr-3"></i>
+                            <span>Warsztaty kulinarne</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="mt-8 p-4 bg-gray-100 rounded-lg">
+                        <p class="italic">"Córka codziennie przynosiła do domu nowe dzieła sztuki. Jestem pod wrażeniem jak wiele nauczyła się w tak krótkim czasie."</p>
+                        <p class="font-semibold mt-2">- Magdalena, mama 7-letniej Juli</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-primary bg-opacity-10 rounded-lg p-8">
+                <h3 class="text-2xl font-semibold text-center mb-6">Wycieczki i atrakcje specjalne</h3>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-lg p-6 shadow">
+                        <img src="/api/placeholder/400/300" alt="Park trampolin" class="rounded mb-4 w-full">
+                        <h4 class="text-xl font-semibold mb-2">Park trampolin</h4>
+                        <p>Dwie godziny dobrej zabawy pod okiem instruktorów</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg p-6 shadow">
+                        <img src="/api/placeholder/400/300" alt="Park linowy" class="rounded mb-4 w-full">
+                        <h4 class="text-xl font-semibold mb-2">Park linowy</h4>
+                        <p>Przygoda na wysokości dostosowana do wieku dzieci</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg p-6 shadow">
+                        <img src="/api/placeholder/400/300" alt="Kino" class="rounded mb-4 w-full">
+                        <h4 class="text-xl font-semibold mb-2">Wyjście do kina</h4>
+                        <p>Seans filmowy z popcornem w najnowszym kinie</p>
+                    </div>
+                </div>
+                
+                <p class="text-center mt-6"><em>* Program wycieczek może się różnić w zależności od turnusu i lokalizacji</em></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Korzyści Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Korzyści z udziału w półkoloniach</h2>
+            
+            <div class="grid md:grid-cols-2 gap-16">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-6 flex items-center">
+                        <i class="fas fa-child text-primary mr-3"></i>
+                        Korzyści dla dziecka
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white rounded-lg p-6 shadow-sm">
+                            <h4 class="text-xl font-semibold mb-2">Nowe przyjaźnie i umiejętności społeczne</h4>
+                            <p>Dziecko poznaje nowych kolegów i koleżanki, uczy się współpracy i komunikacji w grupie.</p>
+                        </div>
+                        
+                        <div class="bg
